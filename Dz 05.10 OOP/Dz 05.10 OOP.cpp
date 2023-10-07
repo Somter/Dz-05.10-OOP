@@ -124,7 +124,7 @@ int main() {
     cin >> choice;
 
     Herbivore* herbivore = nullptr; 
-    Carnivore* carnivore =  nullptr;    
+    Carnivore* carnivore =  nullptr;     
 
     switch (choice) {
     case 1: // Африка
