@@ -19,7 +19,7 @@ protected:
 public:
     Herbivore(string n) : name(n) {}
     virtual void EatGrass() {}
-    virtual void Life(bool life) {}
+    virtual void Life() {}
     virtual void PrintAnimal() {}
     virtual double GetWeight() const { return 0.0; }
     virtual string GetName() const { return ""; }      
@@ -36,7 +36,7 @@ public:
         weight += 10;
         cout << "+ 10 к весу\n";
     }
-    void Life(bool life) {
+    void Life() {
         if (life == true) {
             cout << name << " живой" << endl;
         }
@@ -58,6 +58,39 @@ public:
     }
 };
 
+// Класс "Бизон"
+class Bision : public Herbivore {
+private:
+    double weight;
+    bool life;
+public:
+    Bision(double w, bool l, string n) : weight(w), life(l), Herbivore(n) {}
+    void EatGrass() {
+        weight += 10;   
+        cout << "+ 10 к весу\n";    
+    }   
+    void Life() {   
+        if (life == true) { 
+            cout << name << " живой" << endl;   
+        }
+        else {
+            cout << name << " мёртвый :/" << endl;
+        }
+    }
+    double GetWeight() const
+    {
+        return weight;
+    }
+    string GetName() const  
+    {
+        return name;    
+    }   
+    void PrintAnimal() {
+        cout << "Животное: " << name << endl;    
+        cout << "Вес: " << weight << endl;  
+    }
+};
+
 // Абстрактный класс "Плотоядное животное"
 class Carnivore {
 protected:
@@ -69,6 +102,7 @@ public:
     virtual void Print() {} 
 };
 
+// Лев
 class Lion : public Carnivore
 {
 public: 
@@ -93,7 +127,31 @@ public:
         cout << "Сила: " << power << endl;    
     }
 };
-
+// Волк
+class Wolf: public Carnivore
+{
+public:
+    Wolf() = default;       
+    Wolf(int p, string n): Carnivore(p, n) {}      
+    void Eat(Herbivore* herbivore)
+    {
+        if (power > herbivore->GetWeight())
+        {
+            power += 10;
+            cout << name << " слопал " << herbivore->GetName() << endl;
+            cout << "+10 к силе\n";
+        }
+        else {
+            power -= 10;
+            cout << herbivore->GetName() << " оказался жиробасом... -10 к силе\n";
+        }
+    }
+    void Print() 
+    {
+        cout << "Животное: " << name << endl;       
+        cout << "Сила: " << power << endl;  
+    }
+};      
 
 // Класс "Африка"
 class Africa : public Continent {
@@ -111,6 +169,27 @@ public:
         flora = f;
     }
     void SetFauna(string f) {
+        fauna = f;
+    }
+};
+
+// Класс "Северная Америка"
+class NorthAmerica : public Continent   
+{
+private:
+    string flora;
+    string fauna;
+public:
+    NorthAmerica(string n): Continent(n){}  
+    void PrintContinent() {
+        cout << name << endl;
+        cout << "Флора: " << flora << endl;
+        cout << "Фауна: " << fauna << endl;
+    }
+    void SetFlora(string f) {   
+        flora = f;
+    }
+    void SetFauna(string f) {   
         fauna = f;
     }
 };
@@ -137,7 +216,7 @@ int main() {
         // Антилопа Гну
         herbivore = new Wildebeest(70.7, true, "Антилопа Гну");
         herbivore->EatGrass();
-        herbivore->Life(true);
+        herbivore->Life();
         herbivore->PrintAnimal();
         cout << "\n";   
         // Лев
@@ -147,7 +226,21 @@ int main() {
         break;
     }
     case 2: // Северная Америка
-
+        NorthAmerica obj2("Северная Америка");
+        obj2.SetFlora("Черные ели, осины, сосны, дубы, берёзы, рябины, лиственницы");   
+        obj2.SetFauna("Американский ламантин, Енот-полоскун, Росомаха, Волосатый дятел, Бизоны, волки");    
+        obj2.PrintContinent();  
+        cout << "\n";  
+        // Бизон
+        herbivore = new Bision(300.29, true, "Бизон");
+        herbivore->EatGrass();  
+        herbivore->Life();      
+        herbivore->PrintAnimal();   
+        cout << "\n";   
+        // Волк
+        carnivore = new Wolf(500, "Волк");  
+        carnivore->Eat(herbivore);  
+        carnivore->Print(); 
         break;
     }
 
